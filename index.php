@@ -169,61 +169,63 @@ foreach($ordini as $ordine){
                         Storico
                     </div>
                     <div class="card-body">
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Tipo</th>
-                                    <th scope="col">Quantita Totale</th>
-                                    <th scope="col">Stato</th>
-                                    <th scope="col">Azioni</th>
-                                    <th scope="col">Totale Ingrosso</th>
-                                    <th scope="col">Totale Guadagno</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-                                foreach($tabella as $index=>$ordine){
-                                    switch($ordine->stato){
-                                        case "1":
-                                            $class = 'table-warning';
-                                            break;
-                                        case "2":
-                                            $class = 'table-success';
-                                            break;
-                                        case "0":
-                                            $class = 'table-danger';
-                                            break;
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Tipo</th>
+                                        <th scope="col">Quantita Totale</th>
+                                        <th scope="col">Stato</th>
+                                        <th scope="col">Azioni</th>
+                                        <th scope="col">Totale Ingrosso</th>
+                                        <th scope="col">Totale Guadagno</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    foreach($tabella as $index=>$ordine){
+                                        switch($ordine->stato){
+                                            case "1":
+                                                $class = 'table-warning';
+                                                break;
+                                            case "2":
+                                                $class = 'table-success';
+                                                break;
+                                            case "0":
+                                                $class = 'table-danger';
+                                                break;
+                                        }
+                                        print '<tr class="'.$class.'">';
+                                        print '<td>'.$ordine->alimento.'</td>';
+                                        print '<td>'.$ordine->somma.'</td>';
+                                        print '<td>';
+                                        if($ordine->stato == '1'){
+                                            print 'Pending';
+                                        }elseif($ordine->stato == '2'){
+                                            print 'Finalizzato';
+                                        }else{
+                                            print 'Eliminato';
+                                        }
+                                        print '</td>';
+                                        print '<td>
+                                                <button data-target="'.$ordine->id.'" class="btn btn-sm btn-success finalize">
+                                                    OK
+                                                </button>
+                                                <button data-target="'.$ordine->id.'" class="btn btn-sm btn-danger delete">
+                                                    DEL
+                                                </button>
+                                                <button data-target="'.$ordine->alimentoID.'"  class="btn btn-sm btn-warning edit">
+                                                    MOD
+                                                </button>
+                                            </td>';
+                                        print '<td>'.$ordine->sommaIngrosso.' €</td>';
+                                        print '<td>'.$ordine->sommaGuadagno.' €</td>';
+                                        print '</tr>';
                                     }
-                                    print '<tr class="'.$class.'">';
-                                    print '<td>'.$ordine->alimento.'</td>';
-                                    print '<td>'.$ordine->somma.'</td>';
-                                    print '<td>';
-                                    if($ordine->stato == '1'){
-                                        print 'Pending';
-                                    }elseif($ordine->stato == '2'){
-                                        print 'Finalizzato';
-                                    }else{
-                                        print 'Eliminato';
-                                    }
-                                    print '</td>';
-                                    print '<td>
-                                            <button data-target="'.$ordine->id.'" class="btn btn-sm btn-success finalize">
-                                                OK
-                                            </button>
-                                            <button data-target="'.$ordine->id.'" class="btn btn-sm btn-danger delete">
-                                                DEL
-                                            </button>
-                                            <button data-target="'.$ordine->alimentoID.'"  class="btn btn-sm btn-warning edit">
-                                                MOD
-                                            </button>
-                                        </td>';
-                                    print '<td>'.$ordine->sommaIngrosso.' €</td>';
-                                    print '<td>'.$ordine->sommaGuadagno.' €</td>';
-                                    print '</tr>';
-                                }
-                                ?>
-                            </tbody>
-                        </table>
+                                    ?>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -239,41 +241,43 @@ foreach($ordini as $ordine){
                 </button>
             </div>
             <div class="modal-body">
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th scope="col">Nome</th>
-                            <th scope="col">Prezzo ingrosso</th>
-                            <th scope="col">Prezzo Vendita</th>
-                            <th scope="col">Azioni</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        foreach($infoProdotti as $index=>$prod){
-                            echo '<tr>';
-                            echo '<td> ';
-                            echo '<input type="text" class="form-control modnameProduct" data-target="'.$index.'" value="'.$prod->name.'">';
-                            echo '</td>';
-                            echo '<td>';
-                            echo '<input class="form-control modprezzoIngrosso" data-target="'.$index.'" type="number" min="0" value="'.$prod->prezzoIngrosso.'" step="0.1">';
-                            echo '</td>';
-                            echo '<td>';
-                            echo '<input class="form-control modprezvendita" data-target="'.$index.'" type="number" min="0" value="'.$prod->prezzoVendita.'" step="0.1">';
-                            echo '</td>';
-                            echo '<td>';
-                            echo '<button data-target="'.$index.'" class="btn btn-sm btn-success salvomodProdotto">';
-                            echo 'save';
-                            echo '</button>';
-                            // echo '<button data-target="'.$index.'" class="btn btn-sm btn-danger eliminoProdotto">';
-                            // echo 'del';
-                            // echo '</button>';
-                            echo '</td>';
-                            echo '</tr>';
-                        }
-                        ?>
-                    </tbody>
-                </table>
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col">Nome</th>
+                                <th scope="col">Prezzo ingrosso</th>
+                                <th scope="col">Prezzo Vendita</th>
+                                <th scope="col">Azioni</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            foreach($infoProdotti as $index=>$prod){
+                                echo '<tr>';
+                                echo '<td> ';
+                                echo '<input type="text" class="form-control modnameProduct" data-target="'.$index.'" value="'.$prod->name.'">';
+                                echo '</td>';
+                                echo '<td>';
+                                echo '<input class="form-control modprezzoIngrosso" data-target="'.$index.'" type="number" min="0" value="'.$prod->prezzoIngrosso.'" step="0.1">';
+                                echo '</td>';
+                                echo '<td>';
+                                echo '<input class="form-control modprezvendita" data-target="'.$index.'" type="number" min="0" value="'.$prod->prezzoVendita.'" step="0.1">';
+                                echo '</td>';
+                                echo '<td>';
+                                echo '<button data-target="'.$index.'" class="btn btn-sm btn-success salvomodProdotto">';
+                                echo 'save';
+                                echo '</button>';
+                                // echo '<button data-target="'.$index.'" class="btn btn-sm btn-danger eliminoProdotto">';
+                                // echo 'del';
+                                // echo '</button>';
+                                echo '</td>';
+                                echo '</tr>';
+                            }
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

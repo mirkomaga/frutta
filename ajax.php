@@ -65,7 +65,7 @@ switch ($post['method']) {
     case "generotabellastorici":
         $dati = json_decode($post['dati']);
 
-        $a = '<table class="table table-bordered">
+        $a = '<div class="table-responsive"><table class="table table-bordered">
         <thead>
         <tr>
         <th scope="col">Cliente</th>
@@ -94,7 +94,7 @@ switch ($post['method']) {
             $a .= '</tr>';
         }
         $a .= '</tbody>
-            </table>';
+            </table></div>';
         $result = json_encode($a);
         break;
     default:

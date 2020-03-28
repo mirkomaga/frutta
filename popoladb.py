@@ -1,4 +1,5 @@
-import requests
+import requests, time
+
 
 listino = [
     'Ananas',
@@ -99,7 +100,7 @@ listino = [
 
 
 def insert(nome):
-    url = "http://127.0.0.1:8000/prodotti"
+    url = "http://95.110.224.168:1001/prodotti"
 
     payload = "{\"tipo\": \""+nome+"\"}"
     headers = {
@@ -113,3 +114,4 @@ def insert(nome):
 
 for x in listino:
     insert(x)
+    time.sleep(1)
