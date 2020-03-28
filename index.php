@@ -94,39 +94,6 @@ foreach($ordini as $ordine){
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        Inserisci Nuovo prodotto
-                    </div>
-                    <div class="card-body">
-                        <form id="addProduct">
-                            <div class="row">
-                                <div class="col-4">
-                                    <div class="form-group">
-                                        <label for="nameProduct">Nome prodotto</label>
-                                        <input type="text" class="form-control" id="nameProduct" aria-describedby="Nome prodotto" placeholder="Inserisci nome prodotto">
-                                        <!-- <small id="IdnameProduct" class="form-text text-muted">Nome prodotto.</small> -->
-                                    </div>
-                                </div>
-                                <div class="col-4">
-                                    <div class="form-group">
-                                        <label for="prezzoIngrosso">Prezzo ingrosso</label>
-                                        <input class="form-control" type="number"min="0"  value="0" step="0.1" id="prezzoIngrosso">
-                                    </div>
-                                </div>
-                                
-                                <div class="col-4">
-                                    <div class="form-group">
-                                        <label for="prezzoVendita">Prezzo vendita</label>
-                                        <input class="form-control" type="number"min="0"  value="0" step="0.1" id="prezzoVendita">
-                                    </div>
-                                </div>
-                            </div>
-                            <button type="submit" class="btn btn-sm btn-success">Inserisci</button>
-                            <button type="button" id="editProdotti" class="btn btn-sm btn-info">Modifica</button>
-                        </form>
-                    </div>
-                </div>
-                <div class="card my-5">
-                    <div class="card-header">
                         Ordine
                     </div>
                     <div class="card-body">
@@ -226,6 +193,39 @@ foreach($ordini as $ordine){
                                 </tbody>
                             </table>
                         </div>
+                    </div>
+                </div>
+                <div class="card my-5">
+                    <div class="card-header">
+                        Inserisci Nuovo prodotto
+                    </div>
+                    <div class="card-body">
+                        <form id="addProduct">
+                            <div class="row">
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label for="nameProduct">Nome prodotto</label>
+                                        <input type="text" class="form-control" id="nameProduct" aria-describedby="Nome prodotto" placeholder="Inserisci nome prodotto">
+                                        <!-- <small id="IdnameProduct" class="form-text text-muted">Nome prodotto.</small> -->
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label for="prezzoIngrosso">Prezzo ingrosso</label>
+                                        <input class="form-control" type="number"min="0"  value="0" step="0.1" id="prezzoIngrosso">
+                                    </div>
+                                </div>
+                                
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label for="prezzoVendita">Prezzo vendita</label>
+                                        <input class="form-control" type="number"min="0"  value="0" step="0.1" id="prezzoVendita">
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-sm btn-success">Inserisci</button>
+                            <button type="button" id="editProdotti" class="btn btn-sm btn-info">Modifica</button>
+                        </form>
                     </div>
                 </div>
             </div>
