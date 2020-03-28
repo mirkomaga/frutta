@@ -167,11 +167,11 @@ foreach($ordini as $ordine){
                                         print '<td>'.$ordine->somma.'</td>';
                                         print '<td>';
                                         if($ordine->stato == '1'){
-                                            print 'Pending';
+                                            print 'In attesa';
                                         }elseif($ordine->stato == '2'){
                                             print 'Finalizzato';
                                         }else{
-                                            print 'Eliminato';
+                                            print 'Annullato';
                                         }
                                         print '</td>';
                                         print '<td>
