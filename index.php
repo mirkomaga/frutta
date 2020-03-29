@@ -96,7 +96,7 @@ foreach($ordini as $ordine){
 
 ?>
 <pre>
-<?php print_r($tabella);?>
+<?php //print_r($tabella);?>
 </pre>
 
 <!doctype html>
