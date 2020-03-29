@@ -71,6 +71,7 @@ switch ($post['method']) {
         <th scope="col">Cliente</th>
         <th scope="col">Quantità</th>
         <th scope="col">Tipo</th>
+        <th scope="col">Data</th>
         <th scope="col">Azioni</th>
         </tr>
         </thead>
@@ -102,11 +103,16 @@ switch ($post['method']) {
             // $a .= '</select>';
             $a .= '</td>';
             $a .= '<td>';
+            $a .= $singolo->datetime;
+            $a .= '</td>';
+            $a .= '<td>';
+            $a .= '<div class="btn-group" role="group" aria-label="Basic example">';
             $a .= '<button data-target="'.$singolo->id.'" class="btn btn-sm btn-success salvomodProdotto">';
-            $a .= 'save';
+            $a .= '<i class="fas fa-check"></i>';
             $a .= '</button>';
             $a .= '<button data-target="'.$singolo->id.'" class="btn btn-sm btn-danger eliminoProdotto">';
-            $a .= 'del';
+            $a .= '<i class="far fa-trash-alt"></i>';
+            $a .= '</button>';
             $a .= '</button>';
             $a .= '</td>';
             $a .= '</tr>';

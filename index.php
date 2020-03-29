@@ -80,9 +80,10 @@ foreach($ordini as $ordine){
     if(!property_exists($tmp->somma, $nome)){
         $tmp->somma->$nome->quantita = $ordine->quantita;
         $tmp->somma->$nome->nome = $nome;
+    }else{
+        $tmp->somma->$nome->quantita += $ordine->quantita;
     }
 
-    $tmp->somma->$nome->quantita += $ordine->quantita;
     
     $tabella->$idAlimento->sommaIngrosso += round($tabella->$idAlimento->somma * $infoProdotti->$idAlimento->prezzoIngrosso);
     $tabella->$idAlimento->sommaGuadagno += round($tabella->$idAlimento->somma * $infoProdotti->$idAlimento->prezzoVendita);
@@ -110,6 +111,7 @@ foreach($ordini as $ordine){
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/css/bootstrap-select.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.20/datatables.min.css"/>
+    <link href="fa/css/all.css" rel="stylesheet">
     <title>Magalotti Ortofrutta</title>
   </head>
   <body>
@@ -213,9 +215,9 @@ foreach($ordini as $ordine){
                                         print '</td>';
                                         print '<td rowspan="3">';
                                         print '<div class="btn-group btn-block" role="group" aria-label="Basic example">
-                                            <button type="button" data-target="'.$ordine->id.'" class="btn btn-success finalize">OK</button>
-                                            <button type="button" data-target="'.$ordine->id.'" class="btn btn-danger delete">DEL</button>
-                                            <button type="button" data-target="'.$ordine->alimentoID.'" class="btn btn-warning edit">edit</button>
+                                            <button type="button" data-target="'.$ordine->id.'" class="btn btn-success finalize"><i class="fas fa-check"></i></button>
+                                            <button type="button" data-target="'.$ordine->id.'" class="btn btn-danger delete"><i class="far fa-trash-alt"></i></button>
+                                            <button type="button" data-target="'.$ordine->alimentoID.'" class="btn btn-warning edit"><i class="far fa-edit"></i></button>
                                         </div>';
                                         print '</td>';
                                         print '</tr>';
@@ -305,7 +307,7 @@ foreach($ordini as $ordine){
                                 echo '</td>';
                                 echo '<td>';
                                 echo '<button data-target="'.$index.'" class="btn btn-sm btn-success salvomodProdotto">';
-                                echo 'save';
+                                echo '<i class="fas fa-check"></i>';
                                 echo '</button>';
                                 // echo '<button data-target="'.$index.'" class="btn btn-sm btn-danger eliminoProdotto">';
                                 // echo 'del';
