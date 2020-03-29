@@ -1,7 +1,6 @@
 <?php
 session_start();
 ob_start();
-
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: GET,POST");
@@ -14,8 +13,8 @@ $post = $_REQUEST;
 function call($params, $type, $data = null){
     $curl = curl_init();
     curl_setopt_array($curl, array(
-        CURLOPT_PORT => "1001",
-        CURLOPT_URL => "http://127.0.0.1:1001/".$params,
+        CURLOPT_PORT => "8000",
+        CURLOPT_URL => "http://127.0.0.1:8000/".$params,
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_ENCODING => "",
         CURLOPT_MAXREDIRS => 10,
@@ -64,24 +63,43 @@ switch ($post['method']) {
         break;
     case "generotabellastorici":
         $dati = json_decode($post['dati']);
-
+        
+        $tipoquantita = json_decode(json_decode(call('tipoquantita', 'GET')));
         $a = '<div class="table-responsive"><table class="table table-bordered">
         <thead>
         <tr>
         <th scope="col">Cliente</th>
         <th scope="col">Quantità</th>
+        <th scope="col">Tipo</th>
         <th scope="col">Azioni</th>
         </tr>
         </thead>
         <tbody>';
 
         foreach($dati as $singolo){
+            
             $a .= '<tr>';
             $a .= '<td>';
             $a .= '<input type="text" class="form-control modCliente" data-target="'.$singolo->id.'" value="'.$singolo->cliente.'">';
             $a .= '</td>';
             $a .= '<td>';
             $a .= '<input class="form-control modPeso" data-target="'.$singolo->id.'" type="number" min="0" value="'.$singolo->quantita.'" step="0.1">';
+            $a .= '</td>';
+            $a .= '<td>';
+            // $a .= '<select data-live-search="true" class="selectpicker form-control">';
+            
+            $selectedID = $singolo->id_tipo;
+
+            foreach($tipoquantita as $tipoSingolo){
+                if($selectedID == $tipoSingolo->id){
+                    $a .= $tipoSingolo->tipo;
+                    $selected = 'selected';
+                }else{
+                    $selected = '';
+                }
+                // $a .= '<option '.$selected.' value="'.$tipoSingolo->id.'">'.$tipoSingolo->tipo.'</option>';
+            }
+            // $a .= '</select>';
             $a .= '</td>';
             $a .= '<td>';
             $a .= '<button data-target="'.$singolo->id.'" class="btn btn-sm btn-success salvomodProdotto">';

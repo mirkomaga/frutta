@@ -6,8 +6,8 @@ ob_start();
 function call($params, $type){
     $curl = curl_init();
     curl_setopt_array($curl, array(
-        CURLOPT_PORT => "1001",
-        CURLOPT_URL => "http://127.0.0.1:1001/".$params,
+        CURLOPT_PORT => "8000",
+        CURLOPT_URL => "http://127.0.0.1:8000/".$params,
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_ENCODING => "",
         CURLOPT_MAXREDIRS => 10,
@@ -29,6 +29,14 @@ function call($params, $type){
     }
 }
 
+
+$tipoquantita = json_decode(call('tipoquantita', 'GET'));
+$tipocleaned = (object) [];
+foreach($tipoquantita as $tipo){
+    $nome = $tipo->tipo;
+    $id = $tipo->id;
+    $tipocleaned->$id = $nome;
+}
 
 $tabella = (object) [];
 
@@ -56,7 +64,7 @@ foreach($ordini as $ordine){
         
         $tmp = (object) [];
         $tmp->alimento = $infoProdotti->$idAlimento->name; 
-        $tmp->somma = 0; 
+        $tmp->somma = (object) []; 
         $tmp->id = $ordine->id; 
         $tmp->sommaIngrosso = 0; 
         $tmp->sommaGuadagno = 0; 
@@ -66,13 +74,29 @@ foreach($ordini as $ordine){
         $tabella->$idAlimento = $tmp;
     }
 
-    $tabella->$idAlimento->somma += $ordine->quantita;
+    $idTipo = $ordine->id_tipo;
+    $nome = $tipocleaned->$idTipo;
+
+    if(!property_exists($tmp->somma, $nome)){
+        $tmp->somma->$nome->quantita = $ordine->quantita;
+        $tmp->somma->$nome->nome = $nome;
+    }
+
+    $tmp->somma->$nome->quantita += $ordine->quantita;
+    
     $tabella->$idAlimento->sommaIngrosso += round($tabella->$idAlimento->somma * $infoProdotti->$idAlimento->prezzoIngrosso);
     $tabella->$idAlimento->sommaGuadagno += round($tabella->$idAlimento->somma * $infoProdotti->$idAlimento->prezzoVendita);
 }
+
+
+// print '<pre>';
+// print_r($tabella);
+// print '</pre>';
+
+
 ?>
 <pre>
-<?php //print_r($prodotti); ;exit();?>
+<?php //print_r($tabella);?>
 </pre>
 
 <!doctype html>
@@ -85,7 +109,7 @@ foreach($ordini as $ordine){
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/css/bootstrap-select.min.css">
-
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.20/datatables.min.css"/>
     <title>Magalotti Ortofrutta</title>
   </head>
   <body>
@@ -99,21 +123,35 @@ foreach($ordini as $ordine){
                     <div class="card-body">
                         <form id="addOrdine">
                             <div class="row">
-                                <div class="col-4">
+                                <div class="col-3">
                                     <div class="form-group">
                                         <label for="clientName">Nome Cliente</label>
                                         <input type="text" class="form-control" id="clientName" aria-describedby="Nome Cliente" placeholder="Inserisci nome cliente">
                                         <!-- <small id="IdnameProduct" class="form-text text-muted">Nome prodotto.</small> -->
                                     </div>
                                 </div>
-                                <div class="col-4">
+
+                                <div class="col-3">
                                     <div class="form-group">
                                         <label for="quantitaOrdine">Quantita</label>
                                         <input class="form-control" type="number"min="0"  value="0" step="0.1" id="quantitaOrdine">
                                     </div>
                                 </div>
+
+                                <div class="col-3">
+                                    <div class="form-group">
+                                        <label for="selectTipoQuant">Tipo</label>
+                                        <select data-live-search="true" class="selectpicker form-control" id="selectTipoQuant">
+                                            <?php
+                                            foreach($tipocleaned as $index=>$singolo){
+                                                print '<option value="'.$index.'">'.$singolo.'</option>';
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                </div>
                                 
-                                <div class="col-4">
+                                <div class="col-3">
                                     <div class="form-group">
                                         <label for="selectProdotto">Seleziona prodotto</label>
                                         <select data-live-search="true" data-actions-box="true"  class="selectpicker form-control" id="selectProdotto">
@@ -141,11 +179,9 @@ foreach($ordini as $ordine){
                                 <thead>
                                     <tr>
                                         <th scope="col">Tipo</th>
-                                        <th scope="col">Quantita Totale</th>
+                                        <th colspan="2">Quantita Totale</th>
                                         <th scope="col">Stato</th>
                                         <th scope="col">Azioni</th>
-                                        <th scope="col">Totale Ingrosso</th>
-                                        <th scope="col">Totale Guadagno</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -163,9 +199,10 @@ foreach($ordini as $ordine){
                                                 break;
                                         }
                                         print '<tr class="'.$class.'">';
-                                        print '<td>'.$ordine->alimento.'</td>';
-                                        print '<td>'.$ordine->somma.'</td>';
-                                        print '<td>';
+                                        print '<td rowspan="3">'.$ordine->alimento.'</td>';
+                                        print '<td class="py-0 my-0"><b>Numero</b></td>';
+                                        print '<td class="py-0 my-0">'.$ordine->somma->Numero->quantita.'</td>';
+                                        print '<td rowspan="3">';
                                         if($ordine->stato == '1'){
                                             print 'In attesa';
                                         }elseif($ordine->stato == '2'){
@@ -174,19 +211,21 @@ foreach($ordini as $ordine){
                                             print 'Annullato';
                                         }
                                         print '</td>';
-                                        print '<td>
-                                                <button data-target="'.$ordine->id.'" class="btn btn-sm btn-success finalize">
-                                                    OK
-                                                </button>
-                                                <button data-target="'.$ordine->id.'" class="btn btn-sm btn-danger delete">
-                                                    DEL
-                                                </button>
-                                                <button data-target="'.$ordine->alimentoID.'"  class="btn btn-sm btn-warning edit">
-                                                    MOD
-                                                </button>
-                                            </td>';
-                                        print '<td>'.$ordine->sommaIngrosso.' €</td>';
-                                        print '<td>'.$ordine->sommaGuadagno.' €</td>';
+                                        print '<td rowspan="3">';
+                                        print '<div class="btn-group btn-block" role="group" aria-label="Basic example">
+                                            <button type="button" data-target="'.$ordine->id.'" class="btn btn-success finalize">OK</button>
+                                            <button type="button" data-target="'.$ordine->id.'" class="btn btn-danger delete">DEL</button>
+                                            <button type="button" data-target="'.$ordine->alimentoID.'" class="btn btn-warning edit">edit</button>
+                                        </div>';
+                                        print '</td>';
+                                        print '</tr>';
+                                        print '<tr class="'.$class.'">';
+                                        print '<td class="py-0 my-0"><b>Peso</b></td>';
+                                        print '<td class="py-0 my-0">'.$ordine->somma->Peso->quantita.'</td>';
+                                        print '</tr>';
+                                        print '<tr class="'.$class.'">';
+                                        print '<td class="py-0 my-0"><b>Casse</b></td>';
+                                        print '<td class="py-0 my-0">'.$ordine->somma->Casse->quantita.'</td>';
                                         print '</tr>';
                                     }
                                     ?>
@@ -285,6 +324,7 @@ foreach($ordini as $ordine){
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/bootstrap-select.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.20/datatables.min.js"></script>
     <script src="notify.js" crossorigin="anonymous"></script>
     <script src="script.js" crossorigin="anonymous"></script>
   </body>

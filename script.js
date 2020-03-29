@@ -1,7 +1,17 @@
 $(document).ready(async function(){
-    $('.selectpicker').selectpicker();
-    // await faccioChiamate()
+    init()
 })
+
+function init(){
+    try {
+        $('.selectpicker').selectpicker();
+        // $('.table').dataTable( {
+        //     "autoWidth": false
+        // });
+    } catch (error) {
+        console.log(error)        
+    }
+}
 
 var prodotti = false
 var ordini = false
@@ -93,7 +103,8 @@ $("#addOrdine").submit(function(event){
         "cliente": $("#clientName").val(),
         "quantita": $("#quantitaOrdine").val(),
         "id_alimento": $("#selectProdotto").val(),
-        "stato": "1"
+        "stato": "1",
+        "id_tipo": $("#selectTipoQuant").val()
     }
     return new Promise(resolve => {
         $.ajax({
@@ -324,6 +335,7 @@ async function generoModalstorici(dati){
         }).fail(function (err) {
             resolve("FAIL 404")
         }).always(function () {
+            init()
         });
     });
 }
