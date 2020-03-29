@@ -81,8 +81,8 @@ foreach($ordini as $ordine){
         $tmp->somma->$nome->nome = $nome;
     }
 
-    $tmp->somma->$nome->quantita += $ordine->quantita;
-
+    $tabella->$idAlimento->somma->$nome += $ordine->quantita;
+    // $tmp->somma->$nome->quantita += $ordine->quantita;
     
     $tabella->$idAlimento->sommaIngrosso += round($tabella->$idAlimento->somma * $infoProdotti->$idAlimento->prezzoIngrosso);
     $tabella->$idAlimento->sommaGuadagno += round($tabella->$idAlimento->somma * $infoProdotti->$idAlimento->prezzoVendita);
