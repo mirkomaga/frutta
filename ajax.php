@@ -13,8 +13,8 @@ $post = $_REQUEST;
 function call($params, $type, $data = null){
     $curl = curl_init();
     curl_setopt_array($curl, array(
-        CURLOPT_PORT => "8000",
-        CURLOPT_URL => "http://127.0.0.1:8000/".$params,
+        CURLOPT_PORT => "1001",
+        CURLOPT_URL => "http://127.0.0.1:1001/".$params,
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_ENCODING => "",
         CURLOPT_MAXREDIRS => 10,
