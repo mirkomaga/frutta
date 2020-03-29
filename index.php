@@ -29,7 +29,6 @@ function call($params, $type){
     }
 }
 
-
 $tipoquantita = json_decode(call('tipoquantita', 'GET'));
 $tipocleaned = (object) [];
 foreach($tipoquantita as $tipo){
@@ -78,11 +77,11 @@ foreach($ordini as $ordine){
     $nome = $tipocleaned->$idTipo;
 
     if(!property_exists($tmp->somma, $nome)){
-        $tmp->somma->$nome->quantita = $ordine->quantita;
+        $tmp->somma->$nome->quantita = 0;
         $tmp->somma->$nome->nome = $nome;
-    }else{
-        $tmp->somma->$nome->quantita += $ordine->quantita;
     }
+
+    $tmp->somma->$nome->quantita += $ordine->quantita;
 
     
     $tabella->$idAlimento->sommaIngrosso += round($tabella->$idAlimento->somma * $infoProdotti->$idAlimento->prezzoIngrosso);
@@ -97,7 +96,7 @@ foreach($ordini as $ordine){
 
 ?>
 <pre>
-<?php //print_r($tabella);?>
+<?php print_r($tabella);?>
 </pre>
 
 <!doctype html>
