@@ -419,3 +419,22 @@ $('.modal').on('click', '.eliminoProdotto', function(){
         });
     });
 })
+
+function confermatutto(){
+    return new Promise(resolve => {
+        $.ajax({
+            url: "ajax.php",
+            method: "POST",
+            data: {"method": "confermatutto"},
+            beforeSend: function () {
+            }
+        }).done(function (msg) {
+            resolve(msg)
+        }).fail(function (err) {
+            resolve("FAIL 404")
+        }).always(function () {
+            location.reload(); 
+            init()
+        });
+    });
+}

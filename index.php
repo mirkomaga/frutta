@@ -96,7 +96,7 @@ foreach($ordini as $ordine){
 
 ?>
 <pre>
-<?php //print_r($tabella);?>
+<?php //locaprint_r($tabella);?>
 </pre>
 
 <!doctype html>
@@ -173,6 +173,9 @@ foreach($ordini as $ordine){
                 <div class="card my-5">
                     <div class="card-header">
                         Storico
+                        <button class='btn btn-sm btn-success' style='float: right;' onclick='confermatutto()'>
+                            Completa ordine
+                        </button>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">

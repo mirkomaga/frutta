@@ -61,6 +61,9 @@ switch ($post['method']) {
     case "getordinialimento":
         $result = json_decode(call('getordinialimento/'.$post['id'], 'GET'));
         break;
+    case "confermatutto":
+        $result = json_decode(call('confermallordine', 'GET'));
+        break;
     case "generotabellastorici":
         $dati = json_decode($post['dati']);
         
@@ -124,7 +127,6 @@ switch ($post['method']) {
     default:
         $result = "Non hai specificato un metodo che me piace..";
         break;
-
 }
 
 print $result;
